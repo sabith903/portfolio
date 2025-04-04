@@ -1,0 +1,280 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sabith Karayil{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+<style>
+    /* Gradient Background */
+    body {
+        background: linear-gradient(135deg, rgb(193, 207, 240) 0%, #eef1f5 35%, rgb(239, 164, 228) 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        color: #333;
+        scroll-behavior: smooth;
+    }
+
+    /* Navbar Styles */
+    #navbar {
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+    }
+
+    #navbar.scrolled {
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #navbar.scrolled .nav-link {
+        color: black; /* Keep default color when scrolled */
+    }
+
+    /* Enhanced Nav Link Hover Effect */
+    .nav-link {
+        position: relative;
+        transition: color 0.3s ease;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -4px;
+        left: 50%;
+        background-color: #667eea;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+
+    .nav-link:hover {
+        color: #667eea;
+    }
+
+    /* Active link styles */
+    .nav-link.active {
+        color: #667eea !important;
+    }
+
+    .nav-link.active::after {
+        width: 100%;
+    }
+
+    /* Smooth Scroll Sections */
+    .section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    /* Fade In Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+        opacity: 0;
+        animation: fadeIn 1s ease-out forwards;
+        animation-delay: 0.3s;
+    }
+</style>
+
+    {% block extra_styles %}{% endblock %}
+</head>
+<body class="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100">
+    <!-- Navbar - Previous navbar code remains the same -->
+    <nav id="navbar" class="py-5 px-5 md:px-20 transition-all duration-300 bg-transparent">
+        <div class="container mx-auto flex justify-between items-center relative">
+            <!-- Logo (Moved slightly right) -->
+            <a href="/" class="text-2xl font-bold text-black nav-link pl-4">
+                HELLO 👋
+            </a>
+    
+            <!-- Desktop Menu (Centered, Larger Font, Black Color) -->
+            <div id="desktop-menu" class="hidden md:flex space-x-8 mx-auto">
+                <a href="{% url 'home' %}#hero" class="nav-link text-black font-medium hover:text-indigo-800 transition">Home</a>
+                <a href="{% url 'home' %}#about" class="nav-link text-black font-medium hover:text-indigo-800 transition">About</a>
+                <a href="{% url 'home' %}#skills" class="nav-link text-black font-medium hover:text-indigo-800 transition">Skills</a>
+                <a href="{% url 'home' %}#projects" class="nav-link text-black font-medium hover:text-indigo-800 transition">Projects</a>
+                <a href="{% url 'home' %}#social-links" class="nav-link text-black font-medium hover:text-indigo-800 transition">Links</a>
+                <a href="{% url 'home' %}#contact" class="nav-link text-black font-medium hover:text-indigo-800 transition">Contact</a>
+            </div>
+    
+            <!-- Hire Me Button and Mobile Menu Toggle -->
+            <div class="flex items-center">
+                <!-- Hire Me Button -->
+                <a href="{% url 'contact' %}" class="hidden md:block mr-4 px-6 py-3 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition ease-in-out duration-300 font-bold shadow-md hover:shadow-lg">
+                    Hire Me
+                </a>
+    
+                <!-- Mobile Menu Toggle -->
+                <div id="mobile-menu" class="md:hidden">
+                    <button id="mobile-menu-button" class="text-black focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Mobile Menu Dropdown (Hidden by default) -->
+        <div id="mobile-dropdown" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 bg-white/70 backdrop-blur-md">
+                <a href="{% url 'home' %}#hero" class="block text-black hover:bg-purple-100 py-2 px-3 rounded">Home</a>
+                <a href="{% url 'home' %}#about" class="block text-black hover:bg-purple-100 py-2 px-3 rounded">About</a>
+                <a href="{% url 'home' %}#skills" class="block text-black hover:bg-purple-100 py-2 px-3 rounded">Skills</a>
+                <a href="{% url 'home' %}#projects" class="block text-black hover:bg-purple-100 py-2 px-3 rounded">Projects</a>
+                <a href="{% url 'home' %}#social-links" class="block text-black hover:bg-purple-100 py-2 px-3 rounded">Links</a>
+                <a href="{% url 'home' %}#contact" class="block text-black hover:bg-purple-100 py-2 px-3 rounded">Contact</a>
+                
+                <!-- Hire Me Button -->
+                <a href="{% url 'contact' %}" class="hidden md:block mr-4 px-6 py-3 bg-indigo-600 text-white text-[1.25rem] rounded-full hover:bg-indigo-700 transition ease-in-out duration-300 font-[600] shadow-md hover:shadow-lg">
+                    Hire Me
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 py-6 text-center text-indigo-800/80">
+        <p>&copy; {% now "Y" %} Sabith Karayil. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            const scrollPosition = window.scrollY;
+    
+            if (scrollPosition > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileDropdown = document.getElementById('mobile-dropdown');
+    
+        mobileMenuButton.addEventListener('click', function() {
+            mobileDropdown.classList.toggle('hidden');
+        });
+    
+        // Intersection Observer for Fade In Animation
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+    
+        fadeElements.forEach(element => {
+            fadeObserver.observe(element);
+        });
+    
+        // For highlighting active navigation links based on scroll position
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all sections that we want to track
+            const sections = document.querySelectorAll('.section');
+            // Get all navigation links
+            const navLinks = document.querySelectorAll('#desktop-menu .nav-link');
+            
+            // Function to handle the intersection observer callback
+            function handleIntersect(entries) {
+                entries.forEach(entry => {
+                    // If the section is in view
+                    if (entry.isIntersecting) {
+                        const targetId = entry.target.id;
+                        
+                        // Remove active class from all links
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                        });
+                        
+                        // Add active class to the matching link
+                        const activeLink = document.querySelector(`#desktop-menu a[href="#${targetId}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+                        }
+                    }
+                });
+            }
+            
+            // Create the observer with options
+            const navObserver = new IntersectionObserver(handleIntersect, {
+                threshold: 0.5, // When 50% of the section is visible
+                rootMargin: "-100px 0px" // Adjusts for the navbar height
+            });
+            
+            // Observe all sections
+            sections.forEach(section => {
+                navObserver.observe(section);
+            });
+            
+            // Set initial active state on page load
+            const setInitialActive = function() {
+                let scrollPosition = window.scrollY + 200; // Adding offset for navbar
+                
+                // Find the section that's currently in view
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        const targetId = section.id;
+                        
+                        // Remove active class from all links
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                        });
+                        
+                        // Add active class to the matching link
+                        const activeLink = document.querySelector(`#desktop-menu a[href$="#${targetId}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+                        }
+                    }
+                });
+            };
+            
+            // Set active link on page load
+            setInitialActive();
+            
+            // Also update active link on scroll (for browsers that don't fully support IntersectionObserver)
+            window.addEventListener('scroll', setInitialActive);
+        });
+    </script>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,331 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ skill.name }} Projects{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Gradient Background -->
+<section class="relative overflow-hidden py-16">
+  <!-- Decorative Elements -->
+  <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+    <div class="absolute top-20 left-10 w-48 h-48 rounded-full bg-yellow-300 mix-blend-multiply blur-3xl opacity-30 animate-blob"></div>
+    <div class="absolute top-40 right-10 w-72 h-72 rounded-full bg-cyan-300 mix-blend-multiply blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+    <div class="absolute -bottom-20 left-1/3 w-64 h-64 rounded-full bg-indigo-300 mix-blend-multiply blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+  </div>
+  
+  <!-- Content -->
+  <div class="container relative mx-auto pt-8 px-4 sm:px-6 z-10">
+    <div class="text-center">
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-700">{{ skill.name }}</span>
+      </h1>
+      <div class="w-32 h-1.5 bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 mx-auto mb-6 rounded-full"></div>
+      <p class="text-lg sm:text-xl text-gray-700 max-w-2xl mx-auto font-light">{{ skill.description }}</p>
+      <a href="{% url 'home' %}#skills" class="group inline-flex items-center mt-6 bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 px-6 py-3 rounded-full text-white hover:bg-white/30 transition-all duration-300 border border-white/30">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 transform group-hover:-translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+        Back to All Skills
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Projects Section -->
+<section class="py-12 px-4">
+  <div class="container mx-auto">
+    {% if projects %} 
+      
+      <!-- Project Grid - Masonry-style Layout -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {% for project in projects %}
+        <div class="project-card group rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 bg-white">
+          <!-- Full Image with 4:3 aspect ratio -->
+          <div class="relative aspect-[3/4] overflow-hidden">
+            {% if project.image %}
+              <img src="{{ project.image.url }}" alt="{{ project.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between">
+                <div class="p-3">
+                  <div class="flex space-x-2 mb-2">
+                    <span class="inline-block px-2 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs">{{ skill.name }}</span>
+                  </div>
+                </div>
+              </div>
+            {% else %}
+              <div class="w-full h-full bg-gradient-to-br from-violet-100 via-fuchsia-50 to-pink-100 flex items-center justify-center">
+                <span class="px-3 py-1 rounded-lg bg-white/60 backdrop-blur-sm text-violet-500 text-sm">No image</span>
+              </div>
+            {% endif %}
+            
+            <!-- Hover Overlay with Actions -->
+            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <div class="flex space-x-2">
+                <button class="project-details-btn p-3 bg-white/90 rounded-full text-violet-600 hover:bg-white transition-colors"
+                    data-project-id="{{ project.id }}" 
+                    data-project-name="{{ project.name }}" 
+                    data-project-description="{{ project.description }}" 
+                    data-project-image="{% if project.image %}{{ project.image.url }}{% endif %}"
+                    data-project-url="{{ project.url }}">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                </button>
+                {% if project.url %}
+                <a href="{{ project.url }}" target="_blank" class="p-3 bg-white/90 rounded-full text-violet-600 hover:bg-white transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+                {% endif %}
+                <button class="p-3 bg-white/90 rounded-full text-pink-500 hover:bg-white transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      
+      <!-- Pagination -->
+      <div class="mt-12 flex justify-center">
+        <div class="inline-flex flex-wrap justify-center gap-2">
+          <a href="#" class="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50">Previous</a>
+          <a href="#" class="px-4 py-2 text-sm font-medium text-violet-600 bg-violet-50 border border-gray-300 hover:bg-violet-100">1</a>
+          <a href="#" class="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-50">2</a>
+          <a href="#" class="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-50">3</a>
+          <a href="#" class="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50">Next</a>
+        </div>
+      </div>
+    {% else %}
+      <!-- No Projects Found -->
+      <div class="text-center bg-white p-12 rounded-3xl shadow-xl border border-gray-100 max-w-xl mx-auto">
+        <div class="w-24 h-24 bg-violet-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-800 mb-2">Nothing Here Yet!</h3>
+        <p class="text-gray-600 mb-8">I'm currently working on creating {{ skill.name }} projects. Check back soon!</p>
+        <a href="{% url 'home' %}#skills" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white font-medium rounded-full hover:shadow-lg hover:from-violet-700 hover:to-fuchsia-600 transition-all">
+          Explore Other Skills
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Project Details Modal -->
+<div id="projectModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+  <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+    <!-- Background overlay with blur -->
+    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+    </div>
+
+    <!-- Center modal -->
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+    <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+      <!-- Close button (X) -->
+      <button type="button" id="closeModal" class="absolute top-4 right-4 z-10 bg-white/10 backdrop-blur-md p-2 rounded-full text-gray-400 hover:text-gray-600 focus:outline-none transition-colors">
+        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+        
+      <div>
+        <!-- Project Image -->
+        <div class="relative h-72 sm:h-80 md:h-96">
+          <img id="modalProjectImage" src="" alt="" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end">
+            <div class="p-6 sm:p-8">
+              <h3 class="text-2xl sm:text-3xl font-bold text-white" id="modalProjectName"></h3>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Project Description -->
+        <div class="p-6 sm:p-8">
+          <h4 class="text-lg font-semibold text-gray-800 mb-3">About this project</h4>
+          <p class="text-gray-600 leading-relaxed" id="modalProjectDescription"></p>
+          
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a id="modalProjectUrl" href="#" target="_blank" class="flex-grow sm:flex-grow-0 inline-flex justify-center items-center gap-2 rounded-full border border-transparent shadow-sm px-6 py-3 bg-gradient-to-r from-violet-600 to-fuchsia-500 text-base font-medium text-white hover:from-violet-700 hover:to-fuchsia-600 focus:outline-none transition-colors">
+              Visit Project
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+            <button type="button" class="close-modal flex-grow sm:flex-grow-0 inline-flex justify-center items-center gap-2 rounded-full border border-gray-300 shadow-sm px-6 py-3 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none transition-colors">
+              Close
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for Modal and Animations -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('projectModal');
+        const detailButtons = document.querySelectorAll('.project-details-btn');
+        const closeButtons = document.querySelectorAll('#closeModal, .close-modal');
+        
+        // Modal elements
+        const modalProjectName = document.getElementById('modalProjectName');
+        const modalProjectImage = document.getElementById('modalProjectImage');
+        const modalProjectDescription = document.getElementById('modalProjectDescription');
+        const modalProjectUrl = document.getElementById('modalProjectUrl');
+        
+        // Open modal with project details
+        detailButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const projectName = this.getAttribute('data-project-name');
+                const projectDescription = this.getAttribute('data-project-description');
+                const projectImage = this.getAttribute('data-project-image');
+                const projectUrl = this.getAttribute('data-project-url');
+                
+                modalProjectName.textContent = projectName;
+                modalProjectDescription.textContent = projectDescription;
+                
+                if (projectImage && projectImage !== "None") {
+                    modalProjectImage.src = projectImage;
+                    modalProjectImage.parentElement.classList.remove('hidden');
+                } else {
+                    modalProjectImage.parentElement.classList.add('hidden');
+                }
+                
+                if (projectUrl && projectUrl !== "None") {
+                    modalProjectUrl.href = projectUrl;
+                    modalProjectUrl.classList.remove('hidden');
+                } else {
+                    modalProjectUrl.classList.add('hidden');
+                }
+                
+                // Add animation classes to modal
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            });
+        });
+        
+        // Close modal
+        closeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto'; // Re-enable scrolling
+            });
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Add animation classes to project cards
+        const projectCards = document.querySelectorAll('.project-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Add a staggered delay to each card
+                    setTimeout(() => {
+                        entry.target.classList.add('fade-in');
+                    }, index * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        projectCards.forEach(card => {
+            card.classList.add('opacity-0');
+            observer.observe(card);
+        });
+    });
+</script>
+
+<style>
+    /* Apply custom background */
+    body {
+        background: linear-gradient(135deg, rgb(193, 207, 240) 0%, #eef1f5 35%, rgb(239, 164, 228) 100%);
+        background-attachment: fixed;
+        min-height: 100vh;
+        color: #333;
+        scroll-behavior: smooth;
+    }
+    
+    /* Animation classes */
+    .fade-in {
+        animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Blob animation */
+    @keyframes blob {
+        0% {
+            transform: scale(1) translate(0px, 0px);
+        }
+        33% {
+            transform: scale(1.1) translate(20px, -20px);
+        }
+        66% {
+            transform: scale(0.9) translate(-20px, 20px);
+        }
+        100% {
+            transform: scale(1) translate(0px, 0px);
+        }
+    }
+    
+    .animate-blob {
+        animation: blob 12s infinite alternate;
+    }
+    
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+    
+    .animation-delay-4000 {
+        animation-delay: 4s;
+    }
+    
+    /* Mobile responsiveness improvements */
+    @media (max-width: 640px) {
+        .container {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        
+        .project-card {
+            aspect-ratio: 3/4;
+        }
+        
+        .pagination {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+    }
+</style>
+{% endblock %}
