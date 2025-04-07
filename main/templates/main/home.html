@@ -33,15 +33,11 @@
         </div>
     </div>
     <div class="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-1/2 z-20 w-[800px] h-[800px] top-[55%]">
-      {% if specific_image %}
-          <img 
-              src="{{ specific_image.image.url }}" 
-              alt="{{ specific_image.name }}" 
-              class="w-full h-full object-cover"
-          >
-      {% else %}
-          <p>No featured image found.</p>
-      {% endif %}
+        {% if specific_image and specific_image.image %}
+        <img src="{{ specific_image.image.url }}" alt="Hero Image">
+        {% else %}
+            <p>Hero image not available</p>
+        {% endif %}
   </div>
 </div>
 </section>

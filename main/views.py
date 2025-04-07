@@ -8,11 +8,16 @@ def home(request):
     skills = Skill.objects.all()
     projects = Project.objects.all()
     about = About.objects.first()
-    specific_image = Image.objects.filter(name="Hero Image").first()
-    print(specific_image)  # Check if this prints the image object
-    print(specific_image.image)  # Check if image field is populated
-    print(specific_image.image.url) 
     images = Image.objects.all()
+
+    # Safely get "Hero Image"
+    specific_image = Image.objects.filter(name="Hero Image").first()
+    if specific_image and specific_image.image:
+        print(specific_image)
+        print(specific_image.image)
+        print(specific_image.image.url)
+    else:
+        print("Hero Image not found or image field is missing.")
 
     if request.method == 'POST':
         # Handle contact form submission
@@ -22,7 +27,7 @@ def home(request):
         message = request.POST.get('message')
 
         # Create a new Contact object
-        contact = Contact.objects.create(
+        Contact.objects.create(
             name=name,
             email=email,
             phone_number=phone_number,
@@ -37,6 +42,7 @@ def home(request):
         'images': images,
         'specific_image': specific_image
     })
+
 
 
 def skill_projects(request, skill_id):
